@@ -2,10 +2,10 @@
 import os
 
 # Telegram Bot Token - استبدل بتوكن البوت الخاص بك
-TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
+TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8306731752:AAEb6uuFK9YFCLGn-AGLJZQ_MUGvk2CqjY4')
 
 # معرف الأدمن (استبدل بمعرفك)
-ADMIN_ID = 123456789  # استبدل بمعرف التيليجرام الخاص بك
+ADMIN_ID = 8049455831  # استبدل بمعرف التيليجرام الخاص بك
 
 # قاعدة البيانات
 DATABASE_FILE = 'bot.db'
