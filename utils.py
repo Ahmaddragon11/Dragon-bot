@@ -12,11 +12,17 @@ def is_admin(user_id: int) -> bool:
 
 def create_main_menu():
     keyboard = [
-        [InlineKeyboardButton("نقاطي", callback_data="points")],
-        [InlineKeyboardButton("رابط الإحالة", callback_data="referral")],
-        [InlineKeyboardButton("تفاصيل البوت", callback_data="details")],
-        [InlineKeyboardButton("تواصل مع المطور", url="https://t.me/ahmaddragon")],
-        [InlineKeyboardButton("إرسال ملاحظة أو فكرة", callback_data="feedback")]
+        [InlineKeyboardButton("💰 نقاطي", callback_data="points")],
+        [InlineKeyboardButton("🔗 رابط الإحالة", callback_data="referral")],
+        [InlineKeyboardButton("ℹ️ تفاصيل البوت", callback_data="details")]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+def create_details_menu():
+    keyboard = [
+        [InlineKeyboardButton("📱 تواصل مع المطور", url="https://t.me/ahmaddragon")],
+        [InlineKeyboardButton("💬 إرسال ملاحظة أو فكرة", callback_data="feedback")],
+        [InlineKeyboardButton("⬅️ العودة للقائمة الرئيسية", callback_data="back_to_main")]
     ]
     return InlineKeyboardMarkup(keyboard)
 
