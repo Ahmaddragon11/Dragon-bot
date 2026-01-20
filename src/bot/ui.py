@@ -87,7 +87,10 @@ def create_admin_menu() -> InlineKeyboardMarkup:
             InlineKeyboardButton("🏆 أفضل النقاط", callback_data="admin_top_points"),
             InlineKeyboardButton("📈 أفضل الإحالات", callback_data="admin_top_referrals")
         ],
-        [InlineKeyboardButton("👤 إدارة مستخدم", callback_data="admin_manage_user")],
+        [
+            InlineKeyboardButton("📬 الإشعارات", callback_data="show_notifications_menu"),
+            InlineKeyboardButton("👤 إدارة مستخدم", callback_data="admin_manage_user")
+        ],
         [InlineKeyboardButton("🎁 إدارة المكافآت", callback_data="admin_manage_rewards")],
         [InlineKeyboardButton("🔙 العودة للقائمة الرئيسية", callback_data="main_menu")]
     ]
@@ -193,6 +196,28 @@ def create_confirmation_menu(action: str) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(keyboard)
 
+
+def create_notifications_menu() -> InlineKeyboardMarkup:
+    """
+    إنشاء قائمة الإشعارات للمسؤولين.
+    
+    تتيح للمسؤول عرض وإدارة الإشعارات.
+    
+    Returns:
+        InlineKeyboardMarkup: أزرار قائمة الإشعارات
+        
+    Example:
+        >>> menu = create_notifications_menu()
+        >>> len(menu.inline_keyboard)
+        3
+    """
+    keyboard = [
+        [InlineKeyboardButton("🔄 تحديث", callback_data="notifications_refresh")],
+        [InlineKeyboardButton("✅ وضع علامة مقروء", callback_data="notifications_mark_read")],
+        [InlineKeyboardButton("⚙️ الإعدادات", callback_data="notifications_settings")],
+        [InlineKeyboardButton("🔙 رجوع", callback_data="admin_panel")]
+    ]
+    return InlineKeyboardMarkup(keyboard)
 
 def create_store_menu() -> InlineKeyboardMarkup:
     """

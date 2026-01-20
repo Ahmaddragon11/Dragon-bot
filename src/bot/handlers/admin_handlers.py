@@ -17,6 +17,7 @@ from src.database import (
     get_all_users, get_referral_count, get_top_users_by_level
 )
 from src.utils.helpers import is_admin
+from src.utils import advanced_stats_manager
 from src.bot.ui import (
     create_admin_menu, create_manage_user_menu,
     create_user_control_panel, back_to_main_menu_button
@@ -97,6 +98,17 @@ async def admin_callback_handler(update: Update, context: ContextTypes.DEFAULT_T
         elif data == "admin_find_user_by_username":
             await query.edit_message_text("⌨️ أدخل اسم المستخدم (بدون @):")
             return ASK_FOR_USERNAME
+        elif data == "show_notifications_menu":
+            # استيراد معالج الإشعارات
+            from src.bot.handlers.notification_handler import show_notifications_menu
+            await show_notifications_menu(update, context)
+        elif data == "admin_back":
+            # العودة إلى قائمة الإدارة
+            await query.edit_message_text(
+                "🔐 **لوحة التحكم الإدارية**",
+                reply_markup=create_admin_menu(),
+                parse_mode="HTML"
+            )
         elif data == "admin_broadcast":
             await query.edit_message_text(
                 "📝 أدخل الآن رسالة الإذاعة. يمكنك استخدام تنسيق Markdown.\n"
@@ -143,19 +155,38 @@ async def show_stats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     try:
         total_users: int = get_total_users_count()
         banned_users: int = get_banned_users_count()
+        
+        # الحصول على الإحصائيات المتقدمة
+        daily_summary = advanced_stats_manager.get_daily_summary()
+        weekly_summary = advanced_stats_manager.get_weekly_summary()
+        monthly_summary = advanced_stats_manager.get_monthly_summary()
 
         stats_text: str = (
             f"📊 **إحصائيات البوت:**\n\n"
             f"👥 إجمالي المستخدمين: **{total_users}**\n"
             f"🚫 المستخدمون المحظورون: **{banned_users}**\n"
-            f"✅ المستخدمون النشطون: **{total_users - banned_users}**"
+            f"✅ المستخدمون النشطون: **{total_users - banned_users}**\n\n"
+            f"📅 **اليوم:**\n"
+            f"  • النشطون: {daily_summary['active_users']}\n"
+            f"  • مستخدمون جدد: {daily_summary['new_users']}\n"
+            f"  • مكافآت مطالب بها: {daily_summary['rewards_claimed']}\n\n"
+            f"📊 **هذا الأسبوع:**\n"
+            f"  • النقاط المكتسبة: {weekly_summary['total_points_earned']}\n"
+            f"  • المهام المكتملة: {weekly_summary['tasks_completed']}\n\n"
+            f"📈 **هذا الشهر:**\n"
+            f"  • معدل التفاعل: {monthly_summary['engagement_rate']}\n"
+            f"  • الإحالات الكلية: {monthly_summary['total_referrals']}"
         )
+        
+        # إضافة تقرير صحة النظام
+        stats_text += "\n\n" + advanced_stats_manager.get_health_report()
+        
         await query.edit_message_text(
             stats_text,
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=create_admin_menu()
         )
-        logger.debug(f"عرض الإحصائيات للمسؤول {query.from_user.id}")
+        logger.debug(f"عرض الإحصائيات المتقدمة للمسؤول {query.from_user.id}")
 
     except DatabaseError as e:
         await query.edit_message_text(f"❌ خطأ: {e.message}")

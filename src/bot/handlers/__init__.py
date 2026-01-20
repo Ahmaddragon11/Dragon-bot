@@ -15,6 +15,11 @@ from .rewards_handler import (
     show_rewards_menu, claim_reward_handler, show_store_menu,
     admin_manage_rewards
 )
+from .notification_handler import (
+    show_notifications_menu, notifications_callback_handler, 
+    show_notification_preferences, toggle_notification_type,
+    send_notification_to_admins
+)
 
 __all__ = [
     "start",
@@ -34,5 +39,10 @@ __all__ = [
     "claim_reward_handler",
     "show_store_menu",
     "admin_manage_rewards",
+    "show_notifications_menu",
+    "notifications_callback_handler",
+    "show_notification_preferences",
+    "toggle_notification_type",
+    "send_notification_to_admins",
 ]
 

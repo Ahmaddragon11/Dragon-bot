@@ -22,6 +22,8 @@ from src.bot.handlers import (
     find_user_by_id_handler, find_user_by_username_handler,
     broadcast_message_handler, add_points_handler, cancel_handler,
     show_store_menu, claim_reward_handler, admin_manage_rewards,
+    show_notifications_menu, notifications_callback_handler,
+    toggle_notification_type,
     ASK_FOR_USER_ID, ASK_FOR_USERNAME, ASK_FOR_BROADCAST_MESSAGE, ASK_FOR_POINTS
 )
 from src.utils.exceptions import DragonBotException, ConfigurationError
@@ -192,6 +194,22 @@ def main() -> None:
             CallbackQueryHandler(
                 admin_callback_handler,
                 pattern=r'^(admin_|top_|manage_)'
+            )
+        )
+        
+        # معالج الإشعارات
+        application.add_handler(
+            CallbackQueryHandler(
+                notifications_callback_handler,
+                pattern=r'^(notifications_|show_notifications_menu)'
+            )
+        )
+        
+        # معالج تبديل تفضيلات الإشعارات
+        application.add_handler(
+            CallbackQueryHandler(
+                toggle_notification_type,
+                pattern=r'^toggle_notif_'
             )
         )
         
