@@ -1,9 +1,11 @@
-# models.py
-from dataclasses import dataclass
+# src/models/user.py
+from dataclasses import dataclass, field
 from typing import Optional
+import datetime
 
 @dataclass
 class User:
+    """يمثل هذا الكلاس مستخدم البوت في قاعدة البيانات."""
     user_id: int
     username: Optional[str] = None
     first_name: str = ""
@@ -11,8 +13,4 @@ class User:
     referral_code: str = ""
     referred_by: Optional[int] = None
     is_banned: bool = False
-    restricted_features: list = None
-
-    def __post_init__(self):
-        if self.restricted_features is None:
-            self.restricted_features = []
+    join_date: Optional[datetime.datetime] = None
