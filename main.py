@@ -21,6 +21,7 @@ from src.bot.handlers import (
     start, button_callback_handler, admin_panel, admin_callback_handler,
     find_user_by_id_handler, find_user_by_username_handler,
     broadcast_message_handler, add_points_handler, cancel_handler,
+    show_store_menu, claim_reward_handler, admin_manage_rewards,
     ASK_FOR_USER_ID, ASK_FOR_USERNAME, ASK_FOR_BROADCAST_MESSAGE, ASK_FOR_POINTS
 )
 from src.utils.exceptions import DragonBotException, ConfigurationError
@@ -182,7 +183,7 @@ def main() -> None:
         application.add_handler(
             CallbackQueryHandler(
                 button_callback_handler,
-                pattern=r'^(user_|main_menu|about_)'
+                pattern=r'^(user_|main_menu|about_|store)'
             )
         )
 
@@ -191,6 +192,24 @@ def main() -> None:
             CallbackQueryHandler(
                 admin_callback_handler,
                 pattern=r'^(admin_|top_|manage_)'
+            )
+        )
+        
+        # معالج المكافآت
+        async def reward_callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+            """معالج استعلامات المكافآت."""
+            reward_id_str = update.callback_query.data.split('_')[-1]
+            try:
+                reward_id = int(reward_id_str)
+                await claim_reward_handler(update, context, reward_id)
+            except (ValueError, IndexError):
+                logger.warning(f"معرّف مكافأة غير صحيح: {reward_id_str}")
+                await update.callback_query.answer("❌ خطأ في المكافأة", show_alert=True)
+        
+        application.add_handler(
+            CallbackQueryHandler(
+                reward_callback_handler,
+                pattern=r'^claim_reward_\d+$'
             )
         )
 

@@ -11,7 +11,10 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ContextTypes
 from src.database import get_user, get_referral_count
 from src.core.config import POINTS_PER_REFERRAL
-from src.bot.ui import create_main_menu, create_about_menu, back_to_main_menu_button
+from src.bot.ui import (
+    create_main_menu, create_about_menu, back_to_main_menu_button,
+    create_store_menu
+)
 from src.models.user import User
 from src.utils.exceptions import UserNotFound, DatabaseError
 
@@ -59,6 +62,8 @@ async def button_callback_handler(update: Update, context: ContextTypes.DEFAULT_
             await show_about_menu(update, context)
         elif data == 'user_feedback':
             await request_feedback(update, context)
+        elif data == 'store_menu':
+            await show_store_menu(update, context)
         else:
             logger.warning(f"استعلام زر غير معروف: {data}")
 
@@ -254,3 +259,28 @@ async def request_feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     )
     context.user_data['awaiting_feedback'] = True
     logger.debug(f"بدء استقبال الملاحظات من المستخدم {query.from_user.id}")
+
+
+async def show_store_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    عرض قائمة المتجر الرئيسية.
+    
+    Args:
+        update (Update): تحديث Telegram
+        context (ContextTypes.DEFAULT_TYPE): السياق
+        
+    Returns:
+        None
+    """
+    query = update.callback_query
+    
+    text: str = (
+        "🏪 **المتجر**\n\n"
+        "اختر ما تريد من المتجر:\n"
+    )
+    
+    await query.edit_message_text(
+        text,
+        reply_markup=create_store_menu()
+    )
+    logger.debug(f"عرض المتجر للمستخدم {query.from_user.id}")

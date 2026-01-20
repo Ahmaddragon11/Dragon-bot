@@ -11,6 +11,10 @@ from .admin_handlers import (
     find_user_by_username_handler, broadcast_message_handler, add_points_handler,
     cancel_handler, ASK_FOR_USER_ID, ASK_FOR_USERNAME, ASK_FOR_BROADCAST_MESSAGE, ASK_FOR_POINTS
 )
+from .rewards_handler import (
+    show_rewards_menu, claim_reward_handler, show_store_menu,
+    admin_manage_rewards
+)
 
 __all__ = [
     "start",
@@ -26,5 +30,9 @@ __all__ = [
     "ASK_FOR_USERNAME",
     "ASK_FOR_BROADCAST_MESSAGE",
     "ASK_FOR_POINTS",
+    "show_rewards_menu",
+    "claim_reward_handler",
+    "show_store_menu",
+    "admin_manage_rewards",
 ]
 
