@@ -1,2 +1,5 @@
 python-telegram-bot==20.8
 python-dotenv==1.0.1
+# لاحقًا: SQLAlchemy==2.0.x للعمل مع ORM
+# لاحقًا: pytest للاختبارات الآلية
+# لاحقًا: alembic للترحيل
